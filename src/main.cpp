@@ -1,9 +1,13 @@
-#include "chemskr/ASTNode.h"
-#include "chemskr/Parser.h"
+#include "chemskr/Chemskr.h"
 
 #include <cassert>
 #include <iostream>
 
 int main() {
-	Chemskr::parser.parse("3(CaCO3)H2O")->debug();
+	const std::string formula = "3(CaCO3)H2O";
+
+	Chemskr::parser.parse(formula)->debug();
+
+	for (const auto &[element, count]: Chemskr::count(formula))
+		std::cout << count << " x " << element << std::endl;
 }

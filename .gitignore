@@ -4,4 +4,5 @@ yyparse.cpp
 yyparse.h
 yyparse.output
 /chemskr_test
+/.dep
 
