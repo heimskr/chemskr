@@ -1,0 +1,7 @@
+*.o
+yylex.cpp
+yyparse.cpp
+yyparse.h
+yyparse.output
+/chemskr_test
+
