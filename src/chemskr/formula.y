@@ -69,6 +69,7 @@ list: list expr { $$ = $1->adopt($2); }
 
 expr: "(" list ")" { $$ = $2; D($1, $3); }
     | number "(" list ")" { $$ = $1->adopt($3); D($2, $4); }
+    | "(" list ")" number { $$ = $4->adopt($2); D($1, $3); }
     | element number { $$ = $1->adopt($2); }
     | element;
 
