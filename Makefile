@@ -19,7 +19,7 @@ OBJECTS      := $(SOURCES:.cpp=.o) $(LEXCPP:.cpp=.o) $(PARSECPP:.cpp=.o)
 all: $(OUTPUT)
 
 test: $(OUTPUT)
-	./$(OUTPUT)
+	./$(OUTPUT) "3(CaCO3)H2O"
 
 %.o: %.cpp $(PARSEHDR)
 	$(COMPILER) $(CPPFLAGS) -c $< -o $@
