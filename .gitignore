@@ -5,4 +5,5 @@ yyparse.h
 yyparse.output
 /chemskr_test
 /.dep
+/libchemskr.a
 

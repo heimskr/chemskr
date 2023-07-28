@@ -24,8 +24,11 @@ test: $(OUTPUT)
 %.o: %.cpp $(PARSEHDR)
 	$(COMPILER) $(CPPFLAGS) -c $< -o $@
 
+libchemskr.a: $(OBJECTS)
+	ar rcs $@ $^
+
 clean:
-	rm -f $(OUTPUT) $(shell find src -name '*.o') $(PARSEHDR) $(PARSECPP) $(LEXCPP) $(PARSECPP:.c=.output) $(LEXCPP) $(PARSECPP)
+	rm -f $(OUTPUT) libchemskr.a $(shell find src -name '*.o') $(PARSEHDR) $(PARSECPP) $(LEXCPP) $(PARSECPP:.c=.output) $(LEXCPP) $(PARSECPP)
 
 $(OUTPUT): $(OBJECTS) src/main.o
 	$(COMPILER) -o $@ $^
