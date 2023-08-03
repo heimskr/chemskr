@@ -50,15 +50,25 @@ using AN = Chemskr::ASTNode;
 %token CHEMSKRTOK_ROOT
 %token CHEMSKRTOK_LPAREN "("
 %token CHEMSKRTOK_RPAREN ")"
+%token CHEMSKRTOK_ARROW "->"
+%token CHEMSKRTOK_PLUS "+"
 %token CHEMSKRTOK_ELEMENT
 %token CHEMSKRTOK_INT
 %token CHEMSKR_LIST
+%token CHEMSKR_SUM
 
 %start start
 
 %%
 
-start: list { $$ = Chemskr::parser.root->adopt($1); };
+start: top { $$ = Chemskr::parser.root->adopt($1); };
+
+top: list | equation;
+
+equation: sum "->" sum { $$ = $2->adopt({$1, $3}); };
+
+sum: sum "+" list { $$ = $1->adopt($3); D($2); }
+   | list { $$ = (new AN(Chemskr::parser, CHEMSKR_SUM))->locate($1)->adopt($1); };
 
 element: CHEMSKRTOK_ELEMENT;
 

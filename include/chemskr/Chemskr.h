@@ -10,12 +10,16 @@
 namespace Chemskr {
 	template <template <typename...> typename M = std::map>
 	void customCount(const ASTNode &node, M<std::string, size_t> &map, size_t multiplier) {
-		if (node.symbol == CHEMSKRTOK_ELEMENT) {
+		if (node.symbol == CHEMSKRTOK_ARROW) {
+			assert(node.size() == 2);
+			customCount(*node.front(), map, 1);
+			customCount(*node.back(), map, 1);
+		} else if (node.symbol == CHEMSKRTOK_ELEMENT) {
 			if (node.empty())
 				map[*node.text] += multiplier;
 			else
 				map[*node.text] += multiplier * node.front()->atoi();
-		} else if (node.symbol == CHEMSKR_LIST) {
+		} else if (node.symbol == CHEMSKR_LIST || node.symbol == CHEMSKR_SUM) {
 			for (const ASTNode *subnode: node)
 				customCount(*subnode, map, multiplier);
 		} else if (node.symbol == CHEMSKRTOK_INT) {
@@ -35,4 +39,6 @@ namespace Chemskr {
 	}
 
 	std::map<std::string, size_t> count(const std::string &formula);
+
+	bool isBalanced(const std::string &equation);
 }

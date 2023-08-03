@@ -1,19 +1,39 @@
 #include "chemskr/Chemskr.h"
 
 #include <cassert>
+#include <cstring>
 #include <iomanip>
 #include <iostream>
 
+namespace {
+	void usage(const char *executable) {
+		std::cerr << "Usage: " << executable << " -c <formula>\n"
+		             "       " << executable << " -e <equation>\n";
+	}
+}
+
 int main(int argc, char **argv) {
-	if (argc != 2) {
-		std::cerr << "Usage: " << argv[0] << " <formula>\n";
+	if (argc != 3) {
+		usage(argv[0]);
 		return 1;
 	}
 
-	const std::string formula = argv[1];
+	if (strcmp(argv[1], "-c") == 0) {
 
-	Chemskr::parser.parse(formula)->debug();
+		const std::string formula = argv[2];
 
-	for (const auto &[element, count]: Chemskr::count(formula))
-		std::cout << std::setw(2) << count << " x " << element << std::endl;
+		Chemskr::parser.parse(formula)->debug();
+
+		for (const auto &[element, count]: Chemskr::count(formula))
+			std::cout << std::setw(2) << count << " x " << element << std::endl;
+
+	} else if (strcmp(argv[1], "-e") == 0) {
+
+		const std::string equation = argv[2];
+		std::cout << "Balanced: " << std::boolalpha << Chemskr::isBalanced(equation) << std::endl;
+
+	} else {
+		usage(argv[0]);
+		return 2;
+	}
 }
