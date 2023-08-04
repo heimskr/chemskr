@@ -42,13 +42,9 @@ namespace Chemskr {
 		return countIndex(equation, 1);
 	}
 
-	Equation::Equation(const std::string &equation):
-	root(Parser::parse(equation)) {
-		validateRoot();
-	}
-
-	Equation::Equation(std::unique_ptr<ASTNode> &&root_):
-	root(std::move(root_)) {
+	Equation::Equation(std::string equation):
+	text(std::move(equation)),
+	root(Parser::parse(text)) {
 		validateRoot();
 	}
 

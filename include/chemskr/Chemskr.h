@@ -19,6 +19,7 @@ namespace Chemskr {
 
 	class Equation {
 		private:
+			std::string text;
 			std::unique_ptr<ASTNode> root;
 			std::optional<std::map<std::string, size_t>> leftCounts;
 			std::optional<std::map<std::string, size_t>> rightCounts;
@@ -31,9 +32,9 @@ namespace Chemskr {
 			const std::vector<std::string> & getSide(std::optional<std::vector<std::string>> &, size_t) const;
 
 		public:
-			Equation(const std::string &);
+			Equation(std::string);
 
-			Equation(std::unique_ptr<ASTNode> &&);
+			inline const auto & getText() const { return text; }
 
 			bool isBalanced();
 			bool balanceAndCount(std::map<std::string, size_t> &counts_out);
