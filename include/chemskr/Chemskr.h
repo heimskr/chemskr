@@ -34,6 +34,9 @@ namespace Chemskr {
 		public:
 			Equation(std::string);
 
+			Equation(Equation &&) = default;
+			Equation & operator=(Equation &&) = default;
+
 			inline const auto & getText() const { return text; }
 
 			bool isBalanced();
