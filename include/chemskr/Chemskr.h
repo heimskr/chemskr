@@ -8,6 +8,14 @@
 #include <map>
 
 namespace Chemskr {
+	struct InvalidEquationError: std::runtime_error {
+		using std::runtime_error::runtime_error;
+	};
+
+	struct UnbalancedEquationError: std::runtime_error {
+		using std::runtime_error::runtime_error;
+	};
+
 	template <template <typename...> typename M = std::map>
 	void customCount(const ASTNode &node, M<std::string, size_t> &map, size_t multiplier) {
 		if (node.symbol == CHEMSKRTOK_ARROW) {
@@ -40,5 +48,8 @@ namespace Chemskr {
 
 	std::map<std::string, size_t> count(const std::string &formula);
 
+	std::map<std::string, size_t> countLeft(const std::string &equation);
+	std::map<std::string, size_t> countRight(const std::string &equation);
 	bool isBalanced(const std::string &equation);
+	bool balanceAndCount(const std::string &equation, std::map<std::string, size_t> &counts_out);
 }
