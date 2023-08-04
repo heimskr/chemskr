@@ -166,4 +166,14 @@ namespace Chemskr {
 	const std::vector<std::string> & Equation::getProducts() {
 		return getSide(products, 1);
 	}
+
+	size_t Equation::getAtomCount() {
+		if (!atomCount) {
+			atomCount = 0;
+			for (const auto &[atom, count]: countLeft())
+				*atomCount += count;
+		}
+
+		return *atomCount;
+	}
 }

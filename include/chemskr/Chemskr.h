@@ -26,6 +26,7 @@ namespace Chemskr {
 			std::optional<bool> balanced;
 			std::optional<std::vector<std::string>> reactants;
 			std::optional<std::vector<std::string>> products;
+			std::optional<size_t> atomCount;
 
 			void validateRoot() const;
 			static std::string assemble(const ASTNode &);
@@ -47,6 +48,7 @@ namespace Chemskr {
 
 			const std::vector<std::string> & getReactants();
 			const std::vector<std::string> & getProducts();
+			size_t getAtomCount();
 	};
 
 	template <template <typename...> typename M = std::map>
