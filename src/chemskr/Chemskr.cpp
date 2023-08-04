@@ -1,5 +1,7 @@
 #include "chemskr/Chemskr.h"
 
+#include <sstream>
+
 namespace Chemskr {
 	namespace {
 		template <typename K, typename V>
@@ -45,6 +47,11 @@ namespace Chemskr {
 		validateRoot();
 	}
 
+	Equation::Equation(std::unique_ptr<ASTNode> &&root_):
+	root(std::move(root_)) {
+		validateRoot();
+	}
+
 	void Equation::validateRoot() const {
 		if (!root)
 			throw InvalidEquationError("Couldn't parse equation");
@@ -57,17 +64,46 @@ namespace Chemskr {
 		if (balanced)
 			return *balanced;
 
-		validateRoot();
+		if (!leftCounts) {
+			leftCounts.emplace();
+			customCount(*root->front()->at(0), *leftCounts,  1);
+		}
 
-		customCount(*root->front()->at(0), leftCounts,  1);
-		customCount(*root->front()->at(1), rightCounts, 1);
-		return *(balanced = leftCounts == rightCounts);
+		if (!rightCounts) {
+			rightCounts.emplace();
+			customCount(*root->front()->at(1), *rightCounts, 1);
+		}
+
+		return *(balanced = *leftCounts == *rightCounts);
+	}
+
+	std::string Equation::assemble(const ASTNode &node) {
+		if (node.symbol == CHEMSKR_LIST) {
+			std::stringstream ss;
+			for (const ASTNode *subnode: node)
+				ss << assemble(*subnode);
+			return ss.str();
+		}
+
+		if (node.symbol == CHEMSKRTOK_INT) {
+			std::stringstream ss;
+			ss << *node.text << '(' << assemble(*node.front()) << ')';
+			return ss.str();
+		}
+
+		if (node.symbol == CHEMSKRTOK_ELEMENT) {
+			if (node.empty())
+				return *node.text;
+			return *node.text + std::to_string(node.front()->atoi());
+		}
+
+		return "?";
 	}
 
 	bool Equation::balanceAndCount(std::map<std::string, size_t> &counts_out) {
 		if (balanced) {
 			if (*balanced) {
-				counts_out = leftCounts;
+				counts_out = *leftCounts;
 				return true;
 			}
 
@@ -75,14 +111,19 @@ namespace Chemskr {
 			return false;
 		}
 
-		validateRoot();
+		if (!leftCounts) {
+			leftCounts.emplace();
+			customCount(*root->front()->at(0), *leftCounts,  1);
+		}
 
-		customCount(*root->front()->at(0), leftCounts,  1);
-		customCount(*root->front()->at(1), rightCounts, 1);
+		if (!rightCounts) {
+			rightCounts.emplace();
+			customCount(*root->front()->at(1), *rightCounts, 1);
+		}
 
-		if (leftCounts == rightCounts) {
+		if (*leftCounts == *rightCounts) {
 			balanced = true;
-			counts_out = leftCounts;
+			counts_out = *leftCounts;
 			return true;
 		}
 
@@ -92,14 +133,41 @@ namespace Chemskr {
 	}
 
 	const std::map<std::string, size_t> & Equation::countLeft() {
-		if (leftCounts.empty())
-			customCount(*root->front()->at(0), leftCounts, 1);
-		return leftCounts;
+		if (!leftCounts) {
+			leftCounts.emplace();
+			customCount(*root->front()->at(0), *leftCounts, 1);
+		}
+
+		return *leftCounts;
 	}
 
 	const std::map<std::string, size_t> & Equation::countRight() {
-		if (rightCounts.empty())
-			customCount(*root->front()->at(0), rightCounts, 1);
-		return rightCounts;
+		if (!rightCounts) {
+			rightCounts.emplace();
+			customCount(*root->front()->at(0), *rightCounts, 1);
+		}
+
+		return *rightCounts;
+	}
+
+	const std::vector<std::string> & Equation::getSide(std::optional<std::vector<std::string>> &optional, size_t index) const {
+		if (!optional) {
+			optional.emplace();
+			const ASTNode *list = root->front()->at(index);
+			optional->reserve(list->size());
+			for (const ASTNode *node: *list) {
+				optional->push_back(assemble(*node));
+			}
+		}
+
+		return *optional;
+	}
+
+	const std::vector<std::string> & Equation::getReactants() {
+		return getSide(reactants, 0);
+	}
+
+	const std::vector<std::string> & Equation::getProducts() {
+		return getSide(products, 1);
 	}
 }

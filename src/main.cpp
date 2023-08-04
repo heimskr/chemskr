@@ -35,8 +35,14 @@ int main(int argc, char **argv) {
 
 	} else if (strcmp(argv[1], "-e") == 0) {
 
-		const std::string equation = argv[2];
-		std::cout << "Balanced: " << std::boolalpha << Chemskr::Equation(equation).isBalanced() << std::endl;
+		Chemskr::Equation equation{argv[2]};
+		std::cout << "Balanced: " << std::boolalpha << equation.isBalanced() << std::endl;
+		std::cout << "Reactants:\n";
+		for (const auto &reactant: equation.getReactants())
+			std::cout << "- " << reactant << '\n';
+		std::cout << "Products:\n";
+		for (const auto &product: equation.getProducts())
+			std::cout << "- " << product << '\n';
 
 	} else {
 		usage(argv[0]);
@@ -45,8 +51,11 @@ int main(int argc, char **argv) {
 }
 
 int testNuclear() {
+	size_t i = 0;
 	for (const auto &[atom, daltons]: std::map(Chemskr::nuclideMasses.begin(), Chemskr::nuclideMasses.end())) {
 		std::cout << atom << " binding energy: " << atom.calculateBindingEnergy() << " MeV\n";
+		if (++i == 15)
+			break;
 	}
 
 	return 0;

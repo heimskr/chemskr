@@ -20,22 +20,29 @@ namespace Chemskr {
 	class Equation {
 		private:
 			std::unique_ptr<ASTNode> root;
-			std::map<std::string, size_t> leftCounts;
-			std::map<std::string, size_t> rightCounts;
+			std::optional<std::map<std::string, size_t>> leftCounts;
+			std::optional<std::map<std::string, size_t>> rightCounts;
 			std::optional<bool> balanced;
+			std::optional<std::vector<std::string>> reactants;
+			std::optional<std::vector<std::string>> products;
 
 			void validateRoot() const;
+			static std::string assemble(const ASTNode &);
+			const std::vector<std::string> & getSide(std::optional<std::vector<std::string>> &, size_t) const;
 
 		public:
 			Equation(const std::string &);
 
-			Equation(std::unique_ptr<ASTNode> &&root_):
-				root(std::move(root_)) {}
+			Equation(std::unique_ptr<ASTNode> &&);
 
 			bool isBalanced();
 			bool balanceAndCount(std::map<std::string, size_t> &counts_out);
+
 			const std::map<std::string, size_t> & countLeft();
 			const std::map<std::string, size_t> & countRight();
+
+			const std::vector<std::string> & getReactants();
+			const std::vector<std::string> & getProducts();
 	};
 
 	template <template <typename...> typename M = std::map>
