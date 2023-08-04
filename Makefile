@@ -22,6 +22,7 @@ test: $(OUTPUT)
 	./$(OUTPUT) -c "3(CaCO3)H2O"
 	./$(OUTPUT) -e "3(CaCO3)H2O + W -> Ca2C2O7H2W + CaCO3"
 	./$(OUTPUT) -e "3(CaCO3)H2O + W -> Ca2C2O7H2W + CaSiO3"
+	./$(OUTPUT) -n
 
 %.o: %.cpp $(PARSEHDR)
 	$(COMPILER) $(CPPFLAGS) -c $< -o $@

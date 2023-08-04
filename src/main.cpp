@@ -1,4 +1,5 @@
 #include "chemskr/Chemskr.h"
+#include "chemskr/Nuclear.h"
 
 #include <cassert>
 #include <cstring>
@@ -12,7 +13,12 @@ namespace {
 	}
 }
 
+int testNuclear();
+
 int main(int argc, char **argv) {
+	if (argc == 2 && strcmp(argv[1], "-n") == 0)
+		return testNuclear();
+
 	if (argc != 3) {
 		usage(argv[0]);
 		return 1;
@@ -36,4 +42,12 @@ int main(int argc, char **argv) {
 		usage(argv[0]);
 		return 2;
 	}
+}
+
+int testNuclear() {
+	for (const auto &[atom, daltons]: std::map(Chemskr::nuclideMasses.begin(), Chemskr::nuclideMasses.end())) {
+		std::cout << atom << " binding energy: " << atom.calculateBindingEnergy() << " MeV\n";
+	}
+
+	return 0;
 }
