@@ -40,41 +40,66 @@ namespace Chemskr {
 		return countIndex(equation, 1);
 	}
 
-	bool isBalanced(const std::string &equation) {
-		std::unique_ptr<ASTNode> root = Parser::parse(equation);
-
-		if (!root)
-			throw InvalidEquationError("Couldn't parse equation");
-
-		if (root->size() != 1 || root->symbol == CHEMSKRTOK_ARROW)
-			throw InvalidEquationError("Invalid equation");
-
-		std::map<std::string, size_t> left;
-		std::map<std::string, size_t> right;
-		customCount(*root->front()->at(0), left,  1);
-		customCount(*root->front()->at(1), right, 1);
-		return left == right;
+	Equation::Equation(const std::string &equation):
+	root(Parser::parse(equation)) {
+		validateRoot();
 	}
 
-	bool balanceAndCount(const std::string &equation, std::map<std::string, size_t> &counts_out) {
-		std::unique_ptr<ASTNode> root = Parser::parse(equation);
-
+	void Equation::validateRoot() const {
 		if (!root)
 			throw InvalidEquationError("Couldn't parse equation");
 
 		if (root->size() != 1 || root->symbol == CHEMSKRTOK_ARROW)
 			throw InvalidEquationError("Invalid equation");
+	}
 
-		std::map<std::string, size_t> left;
-		std::map<std::string, size_t> right;
+	bool Equation::isBalanced() {
+		if (balanced)
+			return *balanced;
 
-		customCount(*root->front()->at(0), left,  1);
-		customCount(*root->front()->at(1), right, 1);
-		if (left == right) {
-			counts_out = std::move(left);
+		validateRoot();
+
+		customCount(*root->front()->at(0), leftCounts,  1);
+		customCount(*root->front()->at(1), rightCounts, 1);
+		return *(balanced = leftCounts == rightCounts);
+	}
+
+	bool Equation::balanceAndCount(std::map<std::string, size_t> &counts_out) {
+		if (balanced) {
+			if (*balanced) {
+				counts_out = leftCounts;
+				return true;
+			}
+
+			counts_out = {};
+			return false;
+		}
+
+		validateRoot();
+
+		customCount(*root->front()->at(0), leftCounts,  1);
+		customCount(*root->front()->at(1), rightCounts, 1);
+
+		if (leftCounts == rightCounts) {
+			balanced = true;
+			counts_out = leftCounts;
 			return true;
 		}
 
+		balanced = false;
+		counts_out = {};
 		return false;
+	}
+
+	const std::map<std::string, size_t> & Equation::countLeft() {
+		if (leftCounts.empty())
+			customCount(*root->front()->at(0), leftCounts, 1);
+		return leftCounts;
+	}
+
+	const std::map<std::string, size_t> & Equation::countRight() {
+		if (rightCounts.empty())
+			customCount(*root->front()->at(0), rightCounts, 1);
+		return rightCounts;
 	}
 }

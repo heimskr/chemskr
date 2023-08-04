@@ -6,6 +6,7 @@
 
 #include <cassert>
 #include <map>
+#include <optional>
 
 namespace Chemskr {
 	struct InvalidEquationError: std::runtime_error {
@@ -14,6 +15,27 @@ namespace Chemskr {
 
 	struct UnbalancedEquationError: std::runtime_error {
 		using std::runtime_error::runtime_error;
+	};
+
+	class Equation {
+		private:
+			std::unique_ptr<ASTNode> root;
+			std::map<std::string, size_t> leftCounts;
+			std::map<std::string, size_t> rightCounts;
+			std::optional<bool> balanced;
+
+			void validateRoot() const;
+
+		public:
+			Equation(const std::string &);
+
+			Equation(std::unique_ptr<ASTNode> &&root_):
+				root(std::move(root_)) {}
+
+			bool isBalanced();
+			bool balanceAndCount(std::map<std::string, size_t> &counts_out);
+			const std::map<std::string, size_t> & countLeft();
+			const std::map<std::string, size_t> & countRight();
 	};
 
 	template <template <typename...> typename M = std::map>
@@ -47,9 +69,4 @@ namespace Chemskr {
 	}
 
 	std::map<std::string, size_t> count(const std::string &formula);
-
-	std::map<std::string, size_t> countLeft(const std::string &equation);
-	std::map<std::string, size_t> countRight(const std::string &equation);
-	bool isBalanced(const std::string &equation);
-	bool balanceAndCount(const std::string &equation, std::map<std::string, size_t> &counts_out);
 }

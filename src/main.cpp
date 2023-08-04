@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
 	} else if (strcmp(argv[1], "-e") == 0) {
 
 		const std::string equation = argv[2];
-		std::cout << "Balanced: " << std::boolalpha << Chemskr::isBalanced(equation) << std::endl;
+		std::cout << "Balanced: " << std::boolalpha << Chemskr::Equation(equation).isBalanced() << std::endl;
 
 	} else {
 		usage(argv[0]);

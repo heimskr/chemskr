@@ -20,8 +20,11 @@ all: $(OUTPUT)
 
 test: $(OUTPUT)
 	./$(OUTPUT) -c "3(CaCO3)H2O"
+	@ echo
 	./$(OUTPUT) -e "3(CaCO3)H2O + W -> Ca2C2O7H2W + CaCO3"
+	@ echo
 	./$(OUTPUT) -e "3(CaCO3)H2O + W -> Ca2C2O7H2W + CaSiO3"
+	@ echo
 	./$(OUTPUT) -n
 
 %.o: %.cpp $(PARSEHDR)
