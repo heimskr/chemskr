@@ -11,6 +11,8 @@ namespace Chemskr {
 		"Uuq", "Uup", "Uuh", "Uus", "Uuo"
 	};
 
+	std::unordered_set<std::string> atomicSymbolSet{atomicSymbols.begin() + 1, atomicSymbols.end()};
+
 	Atom::Atom(uint16_t protons_, uint16_t neutrons_):
 		protons(protons_), neutrons(neutrons_) {}
 

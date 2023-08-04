@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 
 namespace Chemskr {
 	constexpr double Mp = 938.272081358; // MeV/c^2
@@ -43,6 +44,7 @@ namespace Chemskr {
 	/** In Daltons */
 	extern std::unordered_map<Atom, double> nuclideMasses;
 	extern std::array<std::string, 119> atomicSymbols;
+	extern std::unordered_set<std::string> atomicSymbolSet;
 }
 
 std::ostream & operator<<(std::ostream &, Chemskr::Atom);
