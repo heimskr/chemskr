@@ -13,6 +13,7 @@ BISONSRC     := src/chemskr/formula.y
 
 SOURCES      := $(shell find src/chemskr -name '*.cpp')
 OBJECTS      := $(SOURCES:.cpp=.o) $(LEXCPP:.cpp=.o) $(PARSECPP:.cpp=.o)
+CLOC_OPTIONS := . --exclude-dir=.vscode --fullpath --not-match-f='^\.\/(src\/chemskr/(NuclideMasses|yylex|yyparse)\.cpp|(include|src)\/chemskr\/yyparse\.h)$$'
 
 .PHONY: all clean
 
@@ -35,6 +36,12 @@ libchemskr.a: $(OBJECTS)
 
 clean:
 	rm -f $(OUTPUT) libchemskr.a $(shell find src -name '*.o') $(PARSEHDR) $(PARSECPP) $(LEXCPP) $(PARSECPP:.c=.output) $(LEXCPP) $(PARSECPP)
+
+count:
+	cloc $(CLOC_OPTIONS)
+
+countbf:
+	cloc --by-file $(CLOC_OPTIONS)
 
 $(OUTPUT): $(OBJECTS) src/main.o
 	$(COMPILER) -o $@ $^
