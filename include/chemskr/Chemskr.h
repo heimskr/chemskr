@@ -17,6 +17,8 @@ namespace Chemskr {
 		using std::runtime_error::runtime_error;
 	};
 
+	using ChemicalCounts = std::vector<std::pair<std::string, size_t>>;
+
 	class Equation {
 		private:
 			std::string text;
@@ -24,13 +26,13 @@ namespace Chemskr {
 			std::optional<std::map<std::string, size_t>> leftCounts;
 			std::optional<std::map<std::string, size_t>> rightCounts;
 			std::optional<bool> balanced;
-			std::optional<std::vector<std::string>> reactants;
-			std::optional<std::vector<std::string>> products;
+			std::optional<ChemicalCounts> reactants;
+			std::optional<ChemicalCounts> products;
 			std::optional<size_t> atomCount;
 
 			void validateRoot() const;
 			static std::string assemble(const ASTNode &);
-			const std::vector<std::string> & getSide(std::optional<std::vector<std::string>> &, size_t) const;
+			const ChemicalCounts & getSide(std::optional<ChemicalCounts> &, size_t) const;
 
 		public:
 			Equation(std::string);
@@ -46,8 +48,8 @@ namespace Chemskr {
 			const std::map<std::string, size_t> & countLeft();
 			const std::map<std::string, size_t> & countRight();
 
-			const std::vector<std::string> & getReactants();
-			const std::vector<std::string> & getProducts();
+			const ChemicalCounts & getReactants();
+			const ChemicalCounts & getProducts();
 			size_t getAtomCount();
 	};
 
@@ -68,6 +70,9 @@ namespace Chemskr {
 		} else if (node.symbol == CHEMSKRTOK_INT) {
 			assert(node.size() == 1);
 			customCount(*node.front(), map, node.atoi() * multiplier);
+		} else if (node.symbol == CHEMSKRTOK_STAR) {
+			assert(node.size() == 2);
+			customCount(*node.at(1), map, node.at(0)->atoi() * multiplier);
 		} else {
 			throw std::invalid_argument("Couldn't handle node of type " + std::string(node.getName()));
 		}

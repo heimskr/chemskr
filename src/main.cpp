@@ -38,11 +38,19 @@ int main(int argc, char **argv) {
 		Chemskr::Equation equation{argv[2]};
 		std::cout << "Balanced: " << std::boolalpha << equation.isBalanced() << std::endl;
 		std::cout << "Reactants:\n";
-		for (const auto &reactant: equation.getReactants())
-			std::cout << "- " << reactant << '\n';
+		for (const auto &[reactant, count]: equation.getReactants()) {
+			if (count == 1)
+				std::cout << "- " << reactant << '\n';
+			else
+				std::cout << "- " << count << '*' << reactant << '\n';
+		}
 		std::cout << "Products:\n";
-		for (const auto &product: equation.getProducts())
-			std::cout << "- " << product << '\n';
+		for (const auto &[product, count]: equation.getProducts()) {
+			if (count == 1)
+				std::cout << "- " << product << '\n';
+			else
+				std::cout << "- " << count << '*' << product << '\n';
+		}
 
 	} else {
 		usage(argv[0]);

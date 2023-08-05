@@ -26,6 +26,8 @@ test: $(OUTPUT)
 	@ echo
 	./$(OUTPUT) -e "3(CaCO3)H2O + W -> Ca2C2O7H2W + CaSiO3"
 	@ echo
+	./$(OUTPUT) -e "3(CaCO3)H2O + W -> 2*CaC + O7H2W + CaCO3"
+	@ echo
 	./$(OUTPUT) -n
 
 %.o: %.cpp $(PARSEHDR)

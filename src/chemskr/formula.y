@@ -52,6 +52,7 @@ using AN = Chemskr::ASTNode;
 %token CHEMSKRTOK_RPAREN ")"
 %token CHEMSKRTOK_ARROW "->"
 %token CHEMSKRTOK_PLUS "+"
+%token CHEMSKRTOK_STAR "*"
 %token CHEMSKRTOK_ELEMENT
 %token CHEMSKRTOK_INT
 %token CHEMSKR_LIST
@@ -67,8 +68,11 @@ top: list | equation;
 
 equation: sum "->" sum { $$ = $2->adopt({$1, $3}); };
 
-sum: sum "+" list { $$ = $1->adopt($3); D($2); }
-   | list { $$ = (new AN(Chemskr::parser, CHEMSKR_SUM))->locate($1)->adopt($1); };
+product: number "*" list { $$ = $2->adopt({$1, $3}); }
+       | list;
+
+sum: sum "+" product { $$ = $1->adopt($3); D($2); }
+   | product { $$ = (new AN(Chemskr::parser, CHEMSKR_SUM))->locate($1)->adopt($1); };
 
 element: CHEMSKRTOK_ELEMENT;
 

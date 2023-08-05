@@ -28,6 +28,7 @@ CHEMSKR_INT				[0-9]+
 ")"						{ CHEMSKR_RTOKEN(RPAREN)  }
 ("->"|"→")				{ CHEMSKR_RTOKEN(ARROW)   }
 "+"						{ CHEMSKR_RTOKEN(PLUS)    }
+"*"						{ CHEMSKR_RTOKEN(STAR)    }
 {CHEMSKR_ELEMENT}		{ CHEMSKR_RTOKEN(ELEMENT) }
 {CHEMSKR_INT}			{ CHEMSKR_RTOKEN(INT)     }
 .						{ Chemskr::lexer.badchar(*yytext); }

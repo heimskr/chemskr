@@ -93,6 +93,12 @@ namespace Chemskr {
 			return *node.text + std::to_string(node.front()->atoi());
 		}
 
+		if (node.symbol == CHEMSKRTOK_STAR) {
+			std::stringstream ss;
+			ss << *node.at(0)->text << '*' << assemble(*node.at(1));
+			return ss.str();
+		}
+
 		return "?";
 	}
 
@@ -146,24 +152,27 @@ namespace Chemskr {
 		return *rightCounts;
 	}
 
-	const std::vector<std::string> & Equation::getSide(std::optional<std::vector<std::string>> &optional, size_t index) const {
+	const ChemicalCounts & Equation::getSide(std::optional<ChemicalCounts> &optional, size_t index) const {
 		if (!optional) {
 			optional.emplace();
 			const ASTNode *list = root->front()->at(index);
 			optional->reserve(list->size());
 			for (const ASTNode *node: *list) {
-				optional->push_back(assemble(*node));
+				if (node->symbol == CHEMSKRTOK_STAR)
+					optional->emplace_back(assemble(*node->at(1)), node->at(0)->atoi());
+				else
+					optional->emplace_back(assemble(*node), 1);
 			}
 		}
 
 		return *optional;
 	}
 
-	const std::vector<std::string> & Equation::getReactants() {
+	const ChemicalCounts & Equation::getReactants() {
 		return getSide(reactants, 0);
 	}
 
-	const std::vector<std::string> & Equation::getProducts() {
+	const ChemicalCounts & Equation::getProducts() {
 		return getSide(products, 1);
 	}
 
