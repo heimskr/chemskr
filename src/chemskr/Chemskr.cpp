@@ -52,7 +52,7 @@ namespace Chemskr {
 		if (!root)
 			throw InvalidEquationError("Couldn't parse equation");
 
-		if (root->size() != 1 || root->symbol == CHEMSKRTOK_ARROW)
+		if (root->size() != 1 || root->at(0)->symbol != CHEMSKRTOK_ARROW)
 			throw InvalidEquationError("Invalid equation");
 	}
 
