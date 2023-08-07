@@ -9,6 +9,10 @@
 #include <optional>
 
 namespace Chemskr {
+	struct ParserError: std::runtime_error {
+		using std::runtime_error::runtime_error;
+	};
+
 	struct InvalidEquationError: std::runtime_error {
 		using std::runtime_error::runtime_error;
 	};

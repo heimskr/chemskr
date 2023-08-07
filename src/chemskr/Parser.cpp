@@ -1,3 +1,4 @@
+#include "chemskr/Chemskr.h"
 #include "chemskr/Lexer.h"
 #include "chemskr/Parser.h"
 #include "chemskr/StringSet.h"
@@ -60,7 +61,7 @@ namespace Chemskr {
 		}
 
 		parser.done();
-		throw std::runtime_error("Parsing failed with " + std::to_string(parser.errorCount) + " error" +
+		throw ParserError("Parsing failed with " + std::to_string(parser.errorCount) + " error" +
 			(parser.errorCount == 1? "" : "s"));
 	}
 }
