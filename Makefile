@@ -1,4 +1,5 @@
 COMPILER     ?= clang++
+BISON        ?= bison
 OPTIMIZATION ?= -O0 -g
 CPPFLAGS     := -std=c++20 -Wall -Wextra -Iinclude $(OPTIMIZATION)
 OUTPUT       := chemskr_test
@@ -52,7 +53,7 @@ $(LEXCPP): $(FLEXSRC) $(PARSEHDR)
 	flex --prefix=chemskr --outfile=$(LEXCPP) $(FLEXSRC)
 
 $(PARSECPP) $(PARSEHDR): $(BISONSRC)
-	bison --color=always --defines=$(PARSEHDR) --output=$(PARSECPP) $(BISONSRC)
+	$(BISON) --color=always --defines=$(PARSEHDR) --output=$(PARSECPP) $(BISONSRC)
 	cp $(PARSEHDR) $(PARSEHDR_SRC)
 
 $(LEXCPP:.cpp=.o): $(LEXCPP)
