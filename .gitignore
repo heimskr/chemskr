@@ -6,4 +6,4 @@ yyparse.output
 /chemskr_test
 /.dep
 /libchemskr.a
-
+/builddir
