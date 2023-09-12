@@ -4,17 +4,18 @@ project('chemskr', 'cpp',
 flex  = find_program('flex',  required: true)
 bison = find_program('bison', required: true)
 
-lgen = generator(flex,
-	output: '@BASENAME@.cpp',
-	arguments: ['--prefix=chemskr', '-o', '@OUTPUT@', '@INPUT@'])
+lexer_src = custom_target('gen-lexer',
+	input: 'src/chemskr/lexer.l',
+	output: 'lexer.cpp',
+	command: [flex, '--prefix=chemskr', '-o', '@OUTPUT@', '@INPUT@'])
 
-lfiles = lgen.process('src/chemskr/lexer.l')
-
-pgen = generator(bison,
-	output: ['@BASENAME@.cpp', '@BASENAME@.h'],
-	arguments: ['@INPUT@', '--defines=@OUTPUT1@', '--output=@OUTPUT0@'])
-
-pfiles = pgen.process('src/chemskr/parser.y')
+parser_src = custom_target('gen-parser',
+	input: 'src/chemskr/parser.y',
+	output: ['parser.cpp', 'parser.h'],
+	command: [bison, '@INPUT@', '--defines=@OUTPUT1@', '--output=@OUTPUT0@'],
+	install_dir: get_option('includedir'),
+	install: true
+)
 
 chemskr_sources = [
 	'src/chemskr/ASTNode.cpp',
@@ -26,10 +27,17 @@ chemskr_sources = [
 	'src/chemskr/Parser.cpp',
 	'src/chemskr/StringSet.cpp',
 	'src/chemskr/Utils.cpp',
+	parser_src[0]
 ]
 
-sl = static_library('chemskr', chemskr_sources,
-	lfiles,
-	pfiles,
+inc_dirs = include_directories('include')
+
+chemskr_lib = static_library('chemskr', chemskr_sources,
 	override_options: 'unity=off',
-	include_directories: include_directories('include'))
+	include_directories: inc_dirs)
+
+chemskr = declare_dependency(
+	sources: [parser_src[1]],
+	include_directories: inc_dirs,
+	link_with: chemskr_lib
+)
