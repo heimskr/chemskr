@@ -10,7 +10,7 @@
 using CHEMSKRSTYPE = Chemskr::ASTNode *;
 
 #ifndef NO_YYPARSE
-#include "parser.h"
+#include "formula.h"
 #endif
 
 #ifdef __APPLE__

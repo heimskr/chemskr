@@ -11,7 +11,7 @@ lexer_src = custom_target('gen-lexer',
 
 parser_src = custom_target('gen-parser',
 	input: 'src/chemskr/parser.y',
-	output: ['parser.cpp', 'parser.h'],
+	output: ['formula.cpp', 'formula.h'],
 	command: [bison, '@INPUT@', '--defines=@OUTPUT1@', '--output=@OUTPUT0@'],
 	install_dir: get_option('includedir'),
 	install: true
@@ -27,6 +27,7 @@ chemskr_sources = [
 	'src/chemskr/Parser.cpp',
 	'src/chemskr/StringSet.cpp',
 	'src/chemskr/Utils.cpp',
+	lexer_src[0],
 	parser_src[0]
 ]
 
