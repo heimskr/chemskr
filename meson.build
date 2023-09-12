@@ -6,7 +6,7 @@ bison = find_program('bison', required: true)
 
 lexer_src = custom_target('gen-lexer',
 	input: 'src/chemskr/lexer.l',
-	output: 'lexer.cpp',
+	output: 'flexer.cpp',
 	command: [flex, '--prefix=chemskr', '-o', '@OUTPUT@', '@INPUT@'])
 
 parser_src = custom_target('gen-parser',
