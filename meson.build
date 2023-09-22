@@ -7,11 +7,13 @@ bison = find_program('bison', required: true)
 lexer_src = custom_target('gen-lexer',
 	input: 'src/chemskr/lexer.l',
 	output: 'flexer.cpp',
+	build_by_default: true,
 	command: [flex, '--prefix=chemskr', '-o', '@OUTPUT@', '@INPUT@'])
 
 parser_src = custom_target('gen-parser',
 	input: 'src/chemskr/parser.y',
 	output: ['formula.cpp', 'formula.h'],
+	build_by_default: true,
 	command: [bison, '@INPUT@', '--defines=@OUTPUT1@', '--output=@OUTPUT0@'],
 	install_dir: get_option('includedir'),
 	install: true
