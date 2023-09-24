@@ -53,7 +53,7 @@ namespace Chemskr {
 			assert(parser.root != nullptr);
 			ASTNode *old_root = parser.root;
 			chemskrlex_destroy();
-			delete parser.buffer;
+			delete[] parser.buffer;
 			parser.root = nullptr;
 			parser.buffer = nullptr;
 			parser.errorCount = 0;
