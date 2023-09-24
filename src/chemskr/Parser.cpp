@@ -33,7 +33,7 @@ namespace Chemskr {
 	void Parser::done() {
 		chemskrlex_destroy();
 		delete root;
-		delete buffer;
+		delete[] buffer;
 		root = nullptr;
 		buffer = nullptr;
 		errorCount = 0;
