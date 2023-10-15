@@ -76,8 +76,12 @@ namespace Chemskr {
 	std::string Equation::assemble(const ASTNode &node) {
 		if (node.symbol == CHEMSKR_LIST) {
 			std::stringstream ss;
-			for (const ASTNode *subnode: node)
-				ss << assemble(*subnode);
+			for (const ASTNode *subnode: node) {
+				std::string subassembly = assemble(*subnode);
+				if (!subassembly.empty() && std::isdigit(subassembly[0]))
+					ss << ' ';
+				ss << subassembly;
+			}
 			return ss.str();
 		}
 
