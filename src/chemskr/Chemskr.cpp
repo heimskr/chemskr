@@ -73,21 +73,25 @@ namespace Chemskr {
 		return *(balanced = *leftCounts == *rightCounts);
 	}
 
-	std::string Equation::assemble(const ASTNode &node) {
+	std::string Equation::assemble(const ASTNode &node, int depth) {
 		if (node.symbol == CHEMSKR_LIST) {
 			std::stringstream ss;
+			if (0 < depth)
+				ss << '(';
 			for (const ASTNode *subnode: node) {
-				std::string subassembly = assemble(*subnode);
+				std::string subassembly = assemble(*subnode, depth + 1);
 				if (!subassembly.empty() && std::isdigit(subassembly[0]))
 					ss << ' ';
 				ss << subassembly;
 			}
+			if (0 < depth)
+				ss << ')';
 			return ss.str();
 		}
 
 		if (node.symbol == CHEMSKRTOK_INT) {
 			std::stringstream ss;
-			ss << *node.text << '(' << assemble(*node.front()) << ')';
+			ss << *node.text << '(' << assemble(*node.front(), depth + 1) << ')';
 			return ss.str();
 		}
 
@@ -99,7 +103,7 @@ namespace Chemskr {
 
 		if (node.symbol == CHEMSKRTOK_STAR) {
 			std::stringstream ss;
-			ss << *node.at(0)->text << '*' << assemble(*node.at(1));
+			ss << *node.at(0)->text << '*' << assemble(*node.at(1), depth + 1);
 			return ss.str();
 		}
 

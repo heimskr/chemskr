@@ -35,7 +35,7 @@ namespace Chemskr {
 			std::optional<size_t> atomCount;
 
 			void validateRoot() const;
-			static std::string assemble(const ASTNode &);
+			static std::string assemble(const ASTNode &, int depth = 0);
 			const ChemicalCounts & getSide(std::optional<ChemicalCounts> &, size_t) const;
 
 		public:
