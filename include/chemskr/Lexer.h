@@ -13,11 +13,7 @@ using CHEMSKRSTYPE = Chemskr::ASTNode *;
 #include "formula.h"
 #endif
 
-#ifdef __APPLE__
-using yysize = size_t;
-#else
 using yysize = int;
-#endif
 
 extern FILE *chemskrin;
 extern char *chemskrtext;
