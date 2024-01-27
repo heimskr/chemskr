@@ -1,8 +1,8 @@
 #pragma once
 
+#include <format>
 #include <initializer_list>
 #include <list>
-#include <ostream>
 #include <set>
 #include <string>
 #include <unordered_map>
@@ -19,8 +19,6 @@ namespace Chemskr {
 		explicit operator std::string() const;
 		explicit operator bool() const;
 	} __attribute__((aligned(16)));
-
-	std::ostream & operator<<(std::ostream &, const ASTLocation &);
 
 	class Parser;
 
@@ -89,3 +87,14 @@ namespace Chemskr {
 			decltype(children)::const_iterator cend() const noexcept;
 	};
 }
+
+template <>
+struct std::formatter<Chemskr::ASTLocation> {
+	constexpr auto parse(std::format_parse_context &ctx) {
+		return ctx.begin();
+    }
+
+	auto format(const auto &location, std::format_context &ctx) const {
+		return std::format_to(ctx.out(), "{}:{}", location.line + 1, location.column);
+	}
+};

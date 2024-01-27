@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <format>
 #include <functional>
 #include <iostream>
 #include <string>
@@ -47,4 +48,13 @@ namespace Chemskr {
 	extern std::unordered_set<std::string> atomicSymbolSet;
 }
 
-std::ostream & operator<<(std::ostream &, Chemskr::Atom);
+template <>
+struct std::formatter<Chemskr::Atom> {
+	constexpr auto parse(std::format_parse_context &ctx) {
+		return ctx.begin();
+    }
+
+	auto format(const auto &atom, std::format_context &ctx) const {
+		return std::format_to(ctx.out(), "{}", atom.getName());
+	}
+};

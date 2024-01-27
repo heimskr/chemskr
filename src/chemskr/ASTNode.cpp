@@ -18,11 +18,6 @@ namespace Chemskr {
 		return !(line == 0 && column == 0);
 	}
 
-	std::ostream & operator<<(std::ostream &os, const ASTLocation &location) {
-		os << std::string(location);
-		return os;
-	}
-
 	ASTNode::ASTNode(Parser &parser_, int sym, const ASTLocation &loc, const char *info):
 		parser(&parser_), symbol(sym), location(loc), text(StringSet::intern(info)) {}
 
@@ -221,8 +216,7 @@ namespace Chemskr {
 			std::cerr << "\e[0m";
 		}
 
-		std::cerr << style() << getName() << "\e[0;2m " << location << "\x1b[0;35m " << *text << " ";
-		std::cerr << "\e[0m" << debugExtra() << "\n";
+		std::cerr << std::format("{}{}\e[0;2m {}\e[0;35m {} \e[0m{}\n", style(), getName(), location, *text, debugExtra());
 		for (ASTNode *child: children)
 			child->debug(indent + 1, child == children.back());
 	}

@@ -30,7 +30,3 @@ namespace Chemskr {
 		return atomicSymbols[protons] + '-' + std::to_string(protons + neutrons);
 	}
 }
-
-std::ostream & operator<<(std::ostream &os, Chemskr::Atom atom) {
-	return os << atom.getName();
-}

@@ -43,7 +43,7 @@ namespace Chemskr {
 
 	void Lexer::badchar(unsigned char ch) {
 		failed = true;
-		std::cerr << "\e[31mBad character at \e[1m" << location << "\e[22m:\e[39m ";
+		std::cerr << std::format("\e[31mBad character at \e[1m{}\e[22m:\e[39m ", location);
 		++parser->errorCount;
 		if (isgraph(ch) != 0) {
 			std::cerr << "'" << ch << "'\n";
@@ -66,7 +66,7 @@ void chemskrerror(const std::string &message) {
 
 void chemskrerror(const std::string &message, const Chemskr::ASTLocation &location) {
 	std::cerr << Chemskr::split(Chemskr::parser.getBuffer(), "\n", false).at(location.line) << "\n";
-	std::cerr << "\e[31mParsing error at \e[1m" << location << "\e[22m: " << message << "\e[0m\n";
+	std::cerr << std::format("\e[31mParsing error at \e[1m{}\e[22m: {}\e[0m\n", location, message);
 	++Chemskr::parser.errorCount;
 	Chemskr::lexer.errors.emplace_back(message, location);
 }
