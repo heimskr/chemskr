@@ -50,11 +50,11 @@ namespace Chemskr {
 
 template <>
 struct std::formatter<Chemskr::Atom> {
-	constexpr auto parse(std::format_parse_context &ctx) {
+	constexpr auto parse(auto &ctx) {
 		return ctx.begin();
-    }
+	}
 
-	auto format(const auto &atom, std::format_context &ctx) const {
+	auto format(const auto &atom, auto &ctx) const {
 		return std::format_to(ctx.out(), "{}", atom.getName());
 	}
 };

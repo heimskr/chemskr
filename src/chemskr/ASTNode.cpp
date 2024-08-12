@@ -1,5 +1,6 @@
 #include <cassert>
 #include <iostream>
+#include <print>
 #include <sstream>
 
 #include "chemskr/ASTNode.h"
@@ -11,7 +12,7 @@
 
 namespace Chemskr {
 	ASTLocation::operator std::string() const {
-		return std::to_string(line + 1) + ":" + std::to_string(column);
+		return std::to_string(line + 1) + ':' + std::to_string(column);
 	}
 
 	ASTLocation::operator bool() const {
@@ -216,7 +217,7 @@ namespace Chemskr {
 			std::cerr << "\e[0m";
 		}
 
-		std::cerr << std::format("{}{}\e[0;2m {}\e[0;35m {} \e[0m{}\n", style(), getName(), location, *text, debugExtra());
+		std::println(stderr, "{}{}\x1b[0;2m {}\x1b[0;35m {} \x1b[0m{}", style(), getName(), location, *text, debugExtra());
 		for (ASTNode *child: children)
 			child->debug(indent + 1, child == children.back());
 	}

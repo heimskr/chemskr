@@ -1,5 +1,5 @@
 project('chemskr', 'cpp',
-	default_options: ['warning_level=2', 'werror=false', 'cpp_std=c++20'])
+	default_options: ['warning_level=2', 'werror=false', 'cpp_std=c++23'])
 
 flex  = find_program('flex',  required: true)
 bison = find_program('bison', required: true)

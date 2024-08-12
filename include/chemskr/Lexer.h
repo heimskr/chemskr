@@ -13,11 +13,11 @@ using CHEMSKRSTYPE = Chemskr::ASTNode *;
 #include "formula.h"
 #endif
 
-using yysize = int;
+using yy_size_t = size_t;
 
 extern FILE *chemskrin;
 extern char *chemskrtext;
-extern yysize chemskrleng;
+extern yy_size_t chemskrleng;
 extern int chemskr_flex_debug;
 
 namespace Chemskr {
@@ -26,18 +26,18 @@ namespace Chemskr {
 	class Lexer {
 		private:
 			Parser *parser;
-			yysize *leng;
+			yy_size_t *leng;
 			ASTNode **lval;
 
 		public:
 			ASTLocation location {0, 1};
 			std::string line;
-			yysize lastYylength = 0;
+			yy_size_t lastYylength = 0;
 			std::unordered_map<int, std::string> lines;
 			bool failed = false;
 			std::vector<std::pair<std::string, ASTLocation>> errors;
 
-			Lexer(Parser &, yysize &, ASTNode *&);
+			Lexer(Parser &, yy_size_t &, ASTNode *&);
 			const std::string * filename(int fileno);
 			void advance(const char *);
 			void newline();

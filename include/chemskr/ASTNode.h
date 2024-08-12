@@ -79,22 +79,22 @@ namespace Chemskr {
 
 			ASTNode * front() const;
 			ASTNode * back() const;
-			decltype(children)::iterator begin();
-			decltype(children)::iterator end();
-			decltype(children)::const_iterator begin() const;
-			decltype(children)::const_iterator end() const;
-			decltype(children)::const_iterator cbegin() const noexcept;
-			decltype(children)::const_iterator cend() const noexcept;
+			typename decltype(children)::iterator begin();
+			typename decltype(children)::iterator end();
+			typename decltype(children)::const_iterator begin() const;
+			typename decltype(children)::const_iterator end() const;
+			typename decltype(children)::const_iterator cbegin() const noexcept;
+			typename decltype(children)::const_iterator cend() const noexcept;
 	};
 }
 
 template <>
 struct std::formatter<Chemskr::ASTLocation> {
-	constexpr auto parse(std::format_parse_context &ctx) {
+	constexpr auto parse(auto &ctx) {
 		return ctx.begin();
-    }
+	}
 
-	auto format(const auto &location, std::format_context &ctx) const {
+	auto format(const auto &location, auto &ctx) const {
 		return std::format_to(ctx.out(), "{}:{}", location.line + 1, location.column);
 	}
 };

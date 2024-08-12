@@ -1,12 +1,14 @@
 #include <array>
 #include <iostream>
+#include <print>
 
+#include "chemskr/ASTNode.h"
 #include "chemskr/Lexer.h"
 #include "chemskr/Parser.h"
 #include "chemskr/Utils.h"
 
 namespace Chemskr {
-	Lexer::Lexer(Parser &parser_, yysize &yyleng_ref, ASTNode *&yylval_ref):
+	Lexer::Lexer(Parser &parser_, yy_size_t &yyleng_ref, ASTNode *&yylval_ref):
 		parser(&parser_), leng(&yyleng_ref), lval(&yylval_ref) {}
 
 	void Lexer::advance(const char *text) {
@@ -35,7 +37,7 @@ namespace Chemskr {
 	}
 
 	void Lexer::newline() {
-		lines.insert({location.line, line});
+		lines.emplace(location.line, line);
 		line.clear();
 		++location.line;
 		location.column = 0;
@@ -43,13 +45,13 @@ namespace Chemskr {
 
 	void Lexer::badchar(unsigned char ch) {
 		failed = true;
-		std::cerr << std::format("\e[31mBad character at \e[1m{}\e[22m:\e[39m ", location);
+		std::print(stderr, "\x1b[31mBad character at \x1b[1m{}\x1b[22m:\x1b[39m ", location);
 		++parser->errorCount;
 		if (isgraph(ch) != 0) {
 			std::cerr << "'" << ch << "'\n";
 		} else {
 			std::array<char, 10> buffer {};
-			sprintf(buffer.data(), "'\\%03o'", ch);
+			std::snprintf(buffer.data(), buffer.size(), "'\\%03o'", ch);
 			std::cerr << buffer.data() << "\n";
 		}
 	}
@@ -66,7 +68,7 @@ void chemskrerror(const std::string &message) {
 
 void chemskrerror(const std::string &message, const Chemskr::ASTLocation &location) {
 	std::cerr << Chemskr::split(Chemskr::parser.getBuffer(), "\n", false).at(location.line) << "\n";
-	std::cerr << std::format("\e[31mParsing error at \e[1m{}\e[22m: {}\e[0m\n", location, message);
+	std::cerr << std::format("\x1b[31mParsing error at \x1b[1m{}\x1b[22m: {}\x1b[0m\n", location, message);
 	++Chemskr::parser.errorCount;
 	Chemskr::lexer.errors.emplace_back(message, location);
 }
