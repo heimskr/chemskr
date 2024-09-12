@@ -35,6 +35,11 @@ chemskr_sources = [
 
 inc_dirs = include_directories('include')
 
+if build_machine.system() == 'windows'
+	cpp_args = ['-Dfileno=_fileno', '-D_POSIX_SOURCE']
+	add_project_arguments(cpp_args, language: 'cpp')
+endif
+
 chemskr_lib = static_library('chemskr', chemskr_sources,
 	override_options: 'unity=off',
 	include_directories: inc_dirs)
