@@ -41,7 +41,7 @@ if build_machine.system() == 'windows'
 endif
 
 chemskr_lib = static_library('chemskr', chemskr_sources,
-	override_options: 'unity=off',
+	override_options: ['unity=off', 'cpp_std=c++23'],
 	include_directories: inc_dirs)
 
 chemskr = declare_dependency(
