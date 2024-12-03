@@ -15,9 +15,11 @@ using CHEMSKRSTYPE = Chemskr::ASTNode *;
 
 using yy_size_t = size_t;
 
+using leng_t = yy_size_t;
+
 extern FILE *chemskrin;
 extern char *chemskrtext;
-extern int chemskrleng;
+extern leng_t chemskrleng;
 extern int chemskr_flex_debug;
 
 namespace Chemskr {
@@ -26,7 +28,7 @@ namespace Chemskr {
 	class Lexer {
 		private:
 			Parser *parser;
-			int *leng;
+			leng_t *leng;
 			ASTNode **lval;
 
 		public:
@@ -37,7 +39,7 @@ namespace Chemskr {
 			bool failed = false;
 			std::vector<std::pair<std::string, ASTLocation>> errors;
 
-			Lexer(Parser &, int &, ASTNode *&);
+			Lexer(Parser &, leng_t &, ASTNode *&);
 			const std::string * filename(int fileno);
 			void advance(const char *);
 			void newline();
