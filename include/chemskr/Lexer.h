@@ -13,8 +13,6 @@ using CHEMSKRSTYPE = Chemskr::ASTNode *;
 #include "formula.h"
 #endif
 
-using yy_size_t = int;
-
 using leng_t = int;
 
 extern FILE *chemskrin;
