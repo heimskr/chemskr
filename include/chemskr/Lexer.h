@@ -15,6 +15,8 @@ using CHEMSKRSTYPE = Chemskr::ASTNode *;
 
 using yy_size_t = size_t;
 
+using leng_t = int;
+
 extern FILE *chemskrin;
 extern char *chemskrtext;
 extern yy_size_t chemskrleng;
