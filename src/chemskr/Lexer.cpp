@@ -68,7 +68,7 @@ void chemskrerror(const std::string &message) {
 
 void chemskrerror(const std::string &message, const Chemskr::ASTLocation &location) {
 	std::cerr << Chemskr::split(Chemskr::parser.getBuffer(), "\n", false).at(location.line) << "\n";
-	std::cerr << std::format("\x1b[31mParsing error at \x1b[1m{}\x1b[22m: {}\x1b[0m\n", location, message);
+	std::println(std::cerr, "\x1b[31mParsing error at \x1b[1m{}\x1b[22m: {}\x1b[39m", location, message);
 	++Chemskr::parser.errorCount;
 	Chemskr::lexer.errors.emplace_back(message, location);
 }

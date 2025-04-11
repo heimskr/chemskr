@@ -32,7 +32,7 @@ namespace Chemskr {
 		public:
 			ASTLocation location {0, 1};
 			std::string line;
-			yy_size_t lastYylength = 0;
+			int lastYylength = 0;
 			std::unordered_map<int, std::string> lines;
 			bool failed = false;
 			std::vector<std::pair<std::string, ASTLocation>> errors;
