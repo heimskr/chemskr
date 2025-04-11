@@ -8,7 +8,7 @@
 #include "chemskr/Utils.h"
 
 namespace Chemskr {
-	Lexer::Lexer(Parser &parser_, yy_size_t &yyleng_ref, ASTNode *&yylval_ref):
+	Lexer::Lexer(Parser &parser_, int &yyleng_ref, ASTNode *&yylval_ref):
 		parser(&parser_), leng(&yyleng_ref), lval(&yylval_ref) {}
 
 	void Lexer::advance(const char *text) {
