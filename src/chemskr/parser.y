@@ -37,7 +37,6 @@ using AN = Chemskr::ASTNode;
 
 %debug
 %defines
-%define parse.error verbose
 %token-table
 %verbose
 
