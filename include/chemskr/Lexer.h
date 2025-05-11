@@ -13,11 +13,12 @@ using CHEMSKRSTYPE = Chemskr::ASTNode *;
 #include "formula.h"
 #endif
 
+using yy_size_t = unsigned long;
 using leng_t = int;
 
 extern FILE *chemskrin;
 extern char *chemskrtext;
-extern int chemskrleng;
+extern yy_size_t chemskrleng;
 extern int chemskr_flex_debug;
 
 namespace Chemskr {
@@ -26,7 +27,7 @@ namespace Chemskr {
 	class Lexer {
 		private:
 			Parser *parser;
-			int *leng;
+			yy_size_t *leng;
 			ASTNode **lval;
 
 		public:
@@ -37,7 +38,7 @@ namespace Chemskr {
 			bool failed = false;
 			std::vector<std::pair<std::string, ASTLocation>> errors;
 
-			Lexer(Parser &, int &, ASTNode *&);
+			Lexer(Parser &, yy_size_t &, ASTNode *&);
 			const std::string * filename(int fileno);
 			void advance(const char *);
 			void newline();
